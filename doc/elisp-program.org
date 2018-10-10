@@ -1,0 +1,312 @@
+* lisp基本语法
+** if expression
+if condition form is:
+(if test body)                    ; only have a true branch
+(if test true_body false_body)    ; have true and false branch both
+#+begin_elisp
+(if (< 7 8) (message "7 less than 8 is true")
+  (message "7 less than 8 is false")
+ )
+msg:"7 less than 8 is true"
+#+end_elisp
+** progn expression
+progn is similar to a block of code, such as { ... } in c-luanguage, the form is:
+(progn (expr1) (expr2))
+
+progn return the last expression in its body, progn返回最后一条语句
+
+
+
+** when expression
+   when expression form is:
+(when test expr1 expr2 ...)
+#+begin_elisp
+(when t (progn (message "this is expr1111") (message "this is expr2")))
+
+result: 
+"this is expr2"
+#+end_elisp
+
+** while expression
+#+begin_elisp
+(setq x 0)
+(while (< x 10)
+  (print (format "the number is %d" x))
+  (setq x (+ x 1))
+  )
+#+end_elisp
+** 局部变量(local variable)
+   define local variable, use let, the form is:
+   (let (var1 var2 ...) body)
+#+begin_elisp
+(let (a b)
+  (setq a 3)
+  (setq b 4)
+  (+ a b)
+  ) ; 7
+#+end_elisp
+
+
+
+* elisp datastruct(数据结构)
+note:当帮助文档中说，函数的参数可以是个sequence type, 则表示参数可以是list,vector,mapcar等
+参数是个array type,则表示参数可以是vector, string, aref
+
+Note: “Sequence” and “Array” are not a actual datatype in elisp. They are grouping names for other actual datatypes.
+When a function's doc, says an argument is a sequence type, it means that it can be list, vector, or string. (e.g. mapcar)
+When a function's doc says an argument is a array type, it means that it can be vector, or string. (e.g. aref)
+List and Vector both hold a ordered sequence of values, each value can be any type.
+Differences Between List and Vector
+
+Here's the primary differences between list and vector:
+Vector: Access time to any element is constant.
+Vector's length cannot change. (if you create a new copy of a vector, the time required is proportional to the vector's length)
+List: Access time to a element is proportional to the distance of the element's position in the list.
+List's length can grow by prepending element, and can shorten by removing first element. These operations have constant time.
+In short, list can grow or shorten, but if you have a long list, say 1 thousand items, accessing 999th item is slow.
+Vector has fixed length. Accessing any element is fast.
+** map
+** list
+*** Create List
+To create a list, write it like this (list a b …).
+#+begin_src
+; assign a list to a var
+(setq mylist (list 1 "b" 3))
+
+; prints a list
+(message "%S" mylist)
+#+end_src
+
+If you do not want the elements evaluated, write it like this:
+
+'(a b …)
+
+This is equivalent to
+
+(quote (list a b …))
+
+#+begin_src
+; assign a list to a var
+(setq mylist '(a b c))
+
+; prints a list
+(message "%S" mylist)
+;; create a list of values of variables
+(let ((x 3) (y 4) (z 5))
+  (message "%S" (list x y z))
+  ) ; prints "(3 4 5)"
+#+end_src
+
+(make-list LENGTH INIT) → create a list of length LENGTH, and all elements with value INIT.
+#+begin_src
+(make-list 4 0) ;; (0 0 0 0)
+#+end_src
+*** Empty List, nil
+In elisp, empty list is equivalent to nil. The following are all equivalent.
+1. '()
+2. (list)
+3. nil
+#+begin_src
+(eq '() (list ) ) ; t
+(eq '() nil); t
+(eq (list ) nil ) ; t
+#+end_src
+*** List of Numbers (aka Range Function)
+(number-sequence n m step) → returns a list of a range of numbers, from n to m, in increment of step.
+(number-sequence n m) → default step 1.
+(number-sequence n) → returns a list of 1 element of value n.
+
+#+begin_src
+;; creating a range of numbers
+
+;; just 1 element
+(number-sequence 5) ; (5)
+
+;; n to m, inclusive
+(number-sequence 2 5) ; (2 3 4 5)
+
+;; using 3 as step
+(number-sequence 0 9 3) ; (0 3 6 9)
+
+;; step can be negative
+(number-sequence 5 0 -1) ; (5 4 3 2 1 0)
+
+;; boundaries can be float but will not include
+(number-sequence 2.2 5.3) ; (2.2 3.2 4.2 5.2)
+#+end_src
+
+*** Length
+(length list) → return number of elements.
+#+begin_src
+(length '("a" "b" "c") ) ; 3
+#+end_src
+
+*** Get 1 Element from a List
+1. (car list) → first element
+2. (nth n list) → nth element
+3. (car (last list)) → last element
+List index count starts from 0.
+
+#+begin_src
+(car (list "a" "b" "c") )   ; "a"
+(nth 1 (list "a" "b" "c") ) ; "b"
+(car (last (list "a" "b" "c")) )   ; "c"
+#+end_src
+
+*** Get Sublist
+1. (cdr list) → 2nd to last elements.
+2. (nthcdr n list) → nth to last elements.
+3. (butlast list n) → without the last n elements.
+
+#+begin_src
+(cdr (list "a" "b" "c") )   ; ("b" "c")
+(butlast (list "a" "b" "c" "d") )   ; ("a" "b" "c")
+(butlast (list "a" "b" "c" "d") 2)   ; ("a" "b")
+#+end_src
+*** Prepend to list
+(cons x list) → Return a new list, with x added to front. (prepend)
+#+begin_src
+(cons "a" (list "c" "d") ) ; ("a" "c" "d")
+(cons (list "a" "b") (list "c" "d") ) ; (("a" "b") "c" "d")
+#+end_src
+*** Append, Join Lists
+(append sequence1 sequence2 …) → join any sequence types and return a list. Warning: if you want it to return a propert list, the last element must be a list, or nil.
+#+begin_src
+(equal
+ (list 1 2 3 4)
+ (append (list 1 2) (list 3 4))
+ )
+;; t
+#+end_src
+
+*** Modify List Variable
+1. (push list) → Add a element to the front variable. Returns the new list.
+2. (pop list) → Remove first element from the variable. Returns the removed element.
+3. (nbutlast list n) → Remove last n elements from the variable. Returns the new value of the variable.
+4. (setcar list x) → replaces the first element in list with x. Returns x.
+5. (setcdr list x) → replaces the rest of elements in list with x. Returns x.
+
+#+begin_src
+(let ((x '(1)))
+  (push 2 x)
+  (equal x '(2 1)) ; true
+  )
+
+(setq mylist '("a" "b" "c"))
+(pop mylist)   ; "a"
+(print mylist) ; ("b" "c")
+#+end_src
+
+The weird names {car, cdr, cons} are like that for historical reasons.
+
+*** List to String
+Ways to convert a list to string.
+#+begin_src
+;; convert a list to string
+(mapconcat 'number-to-string '(1 2 3) ",")
+;; "1,2,3"
+
+;; convert a list to string
+(mapconcat 'identity '("a" "b" "c") ",")
+;; "a,b,c"
+
+;; convert list to string
+
+(format "%s" '(1 "two" 3))
+;; "(1 two 3)"
+
+(substring (format "%s" '(1 "two" 3)) 1 -1)
+;; "1 two 3"
+#+end_src
+
+** Association List(关联的链表)
+** Property List
+** Symbol Property List
+
+** vector
+the property of vector:
+1. Vector is a ordered sequence of values.
+2. Each element can be any type.
+3. Element's value can be changed.
+4. Number of elements cannot change. (i.e. Vector's length is fixed.)
+5. Reading/Writing a element has constant random access time.
+
+*** Create vector
+1. use make_vector, example (make_vector 5 0) → create a vector of length 5, value 0 for all elements.
+2. define vector directly, eg: 
+#+begin emacs lisp
+;; create a vector and set to var v
+(setq v (vector 3 4 5))
+#+end emacs lisp
+3. 
+#+begin emacs lisp
+(setq x 7)
+;; each element will be evaluated
+(setq v (vector 3 x 5))
+
+v ; [3 7 5]
+#+end emacs lisp
+
+*** Fill vector
+(fillarray array val) → make all elements of array to have value val
+#+begin elisp
+(setq aa [3 4 5])
+(fillarray aa nil) ;; [nil nil nil]
+#+end elisp
+
+*** Length
+#+begin_src
+(length (vector 7 4 5)) ; 3
+#+end_src
+
+*** Get element
+(aref array n) → Return the element of array at index n.
+(elt sequence n) → Return element of sequence at index n.
+
+*** Change element
+(aset ARRAY IDX NEWELT) → Store into the element of ARRAY at index IDX the value NEWELT. Return NEWELT.
+#+begin_src
+(setq v [3 4 5])
+(aset v 0 "b")
+v  ; ⇒ ["b" 4 5]
+#+end_src
+
+*** Nest vector
+Vector can be nested in any way, because the elements can be any type
+#+begin_src
+;; nested vector
+[[1 2] [3 4]] ; 2 by 2 matrix
+#+end_src
+
+#+begin_src
+;; random nested vector
+[8 [3 [2 9] c] 7 [4 "b"]]
+#+end_src
+
+*** Join vectos, convert vector to list
+(vconcat sequence1 sequence2 …) → join any sequence types and return a vector. (List and vector are both sequence types.)
+#+begin_src
+;; join any sequence types
+(vconcat [3 4] ["a" "b"]) ; ⇒ [3 4 "a" "b"]
+
+(vconcat [3 4] '("a" "b")) ; ⇒ [3 4 "a" "b"]
+
+(vconcat [3 4] "ab") ; ⇒ [3 4 97 98]
+;; string elements are converted to char.
+;; 97 is the codepoint for the char a
+#+end_src
+
+**** convert vector to list
+(append sequence1 sequence2 …) → join any sequence types and return a list. (List and vector are both sequence types.)
+
+Warning: if you want it to return a propert list, the last element must be a list, or nil.
+
+
+** hash table
+
+What's the Difference Between Alist and Hash Table?
+1. Alist is a list, meaning, items are ordered, and can have duplicate keys.
+2. Hash Table entries are unique. Hash Table items are not ordered. Hash Table is usually faster for random access when there are huge number of items (tens of thousands).
+3. Alist has literal form. That is, you can create it by for example, (list (cons 1 2) (cons 3 4)). Hashtable does not have a literal form. You have to create a hash table, and use a function to add each key/value pair.
+
+

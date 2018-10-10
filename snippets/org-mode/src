@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: insert source code
+# key: src
+# --
+#+begin_${1:elisp}
+$0
+#+end_$1
