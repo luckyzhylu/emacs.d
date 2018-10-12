@@ -11,6 +11,8 @@
   (progn
     ;; Make whitespace-mode with very basic background coloring for whitespaces.
     ;; http://ergoemacs.org/emacs/whitespace-mode.html
+
+    (global-whitespace-mode t)
     (setq whitespace-style (quote (face spaces tabs newline space-mark tab-mark newline-mark )))
 
     ;; Make whitespace-mode and whitespace-newline-mode use “¶” for end of line char and “▷” for tab.
@@ -20,16 +22,27 @@
             (space-mark 32 [183] [46]) ; SPACE 32 「 」, 183 MIDDLE DOT 「·」, 46 FULL STOP 「.」
             (newline-mark 10 [182 10]) ; LINE FEED,
             (tab-mark 9 [9655 9] [92 9]) ; tab
-            ))))
+            ))
+    )
+  )
+
+(my-whitespace-mode)
+
+(require 'indent-guide)
+(indent-guide-global-mode t)
+(global-aggressive-indent-mode t)
+
+;;(set-face-background 'indent-guide-face "dimgray")
+;; (setq indent-guide-char ":")
+
 
 (defun my-private-program-hook()
   (when (derived-mode-p 'c-mode 'c++-mode)
     (yas-global-mode 1)
     (ggtags-mode 1))
 
-  (my-whitespace-mode)
   ;; (whitespace-mode t) ;; 显示空白字符
-;;  (delete-trailing-lines t)
+  ;;  (delete-trailing-lines t)
   (whitespace-cleanup t)  ;; 清理空白字符
   (delete-trailing-whitespace t)
   (electric-indent-mode 1) ;; make return key also do indent, globally
@@ -38,17 +51,17 @@
     (doxymacs-font-lock))
   (when (require 'sourcepari nil 'noerror)
     (setq sourcepair-source-extensions
-	  '(".cpp" ".cxx" ".c++" ".CC" ".cc" ".C" ".c" ".mm" ".m"))
+          '(".cpp" ".cxx" ".c++" ".CC" ".cc" ".C" ".c" ".mm" ".m"))
     (setq sourcepair-header-extensions
-	  '(".hpp" ".hxx" ".h++" ".HH" ".hh" ".H" ".h"))
+          '(".hpp" ".hxx" ".h++" ".HH" ".hh" ".H" ".h"))
     (setq sourcepair-header-path '("." "include" ".." "../include" "../inc"
-				   "../../include" "../../inc" "../*"))
+                                   "../../include" "../../inc" "../*"))
     (setq sourcepair-source-path '("." "src" ".." "../src" "../*"))
     (setq sourcepair-recurse-ignore '("CVS" ".svn" ".hg" ".git" ".bzr"
-				      "Obj" "Debug" "Release" "bin" "lib"))
+                                      "Obj" "Debug" "Release" "bin" "lib"))
     (define-key c-mode-base-map (kdb "esc <f12>") 'sourcepair-load)
     (define-key c-mode-base-map [f12] 'sourcepair-load))
-)
+  )
 (add-hook 'c-mode-common-hook 'my-private-program-hook)
 
 (define-key global-map "\C-xz" 'sourcepair-load)

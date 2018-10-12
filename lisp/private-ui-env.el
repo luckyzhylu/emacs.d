@@ -106,11 +106,24 @@
 ;; Corrects (and improves) org-mode's native fontification.
 ;; (doom-themes-org-config)
 (if (ido-mode t)
-  (progn (setq ido-max-window-height 20)
-	 (setq max-mini-window-height 5))) ;; 不能实现赋值,zhangyunlu
+    (progn (setq ido-max-window-height 20)
+           (setq max-mini-window-height 5))) ;; 不能实现赋值,zhangyunlu
 
 ;; (when (require 'undo-tree)
 ;; (global-undo-tree-mode))
+
+(require 'hungry-delete)
+(global-hungry-delete-mode t)
+
+;; 自动保存bookmark,emacs退出自动保存bookmark
+;; (setq bookmark-save-flag 1) ; everytime bookmark is changed, automatically save it
+(setq bookmark-save-flag t) ; save bookmark when emacs quits
+
+;; Set Emacs to Open Bookmark File on Start
+;; (setq inhibit-splash-screen t)
+;; (require 'bookmark)
+;; (bookmark-bmenu-list)
+;; (switch-to-buffer "*Bookmark List*")
 
 (defun change-default-directory()
   "change default-directory by user input"
@@ -120,9 +133,13 @@
 
 (require 'browse-kill-ring)
 (global-set-key "\C-cy" 'browse-kill-ring)
+;; (global-set-key (kbd "C-m") 'set-mark-command) ;; set mark,define by zhangyunlu
+(setq mark-ring-max 6)
+(setq global-mark-ring-max 6)
 
 (electric-pair-mode 1) ;; auto insert closing bracket,自动插入右括号
 
 ;; make cursor movement stop in between camelCase words.
 ;; (global-subword-mode 1) ;; 光标在大小写之间停住
 (provide 'private-ui-env)
+

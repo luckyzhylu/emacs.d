@@ -5,8 +5,8 @@
 ;; You may delete these explanatory comments.
 (require 'package)
 (package-initialize)
-(add-to-list'package-archives '("melpa" . "http://elpa.emacs-china.org/gnu/") t)
-(add-to-list'package-archives '("melpa" . "http://elpa.emacs-china.org/melpa-stable/")t)
+;; (add-to-list'package-archives '("melpa" . "http://elpa.emacs-china.org/gnu/") t)
+;; (add-to-list'package-archives '("melpa" . "http://elpa.emacs-china.org/melpa-stable/")t)
 
 
 ;; (custom-set-variables
@@ -31,13 +31,15 @@
  '(hl-paren-colors
    (quote
     ("dark red" "dark blue" "dark magenta" "light green")))
- '(package-selected-packages (quote (molokai-theme undo-tree ggtags yasnippet company))))
+ '(package-selected-packages
+   (quote
+    (aggressive-indent hungry-delete molokai-theme undo-tree ggtags yasnippet company))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:inherit nil :stipple nil :background "#fafafa" :foreground "#2f2f2f" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :foundry "nil" :family "Menlo")))))
 
 ;;(tool-bar-mode 0)
 ;; (add-to-list 'load-path "~/.emacs.d/elpa")

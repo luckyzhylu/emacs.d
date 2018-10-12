@@ -38,24 +38,29 @@ tabbar-press-scroll-right (C-c <C-next>)
 (define-key viper-vi-global-user-map (kbd "SPC") 'ace-jump-mode)
 #+end_ace-jump
 
-** bookmark使用(bm.el)
-#+begin_bookmark mode
-  (global-set-key (kbd "<C-f2>") 'bm-toggle)
-  (global-set-key [M-f2] 'bm-toggle)
-  (global-set-key (kbd "ESC <f2>") 'bm-toggle) ; putty
-  (global-set-key (kbd "<f2>")   'bm-next-or-previous)
-  (global-set-key (kbd "<S-f2>") 'bm-previous)
-  (global-set-key [f14] 'bm-previous)   ; S-f2
-  ;; (global-set-key (kbd "ESC ESC <f2>") 'bm-previous)
-  (global-set-key (kbd "<C-S-f2>") 'bm-remove-all-current-buffer)
-  ;; (global-set-key (kbd "<left-fringe> <mouse-1>") 'bm-toggle-mouse)
-  ;; (global-set-key (kbd "<left-fringe> <mouse-2>") 'bm-toggle-mouse)
-  ;; (global-set-key (kbd "<left-fringe> <mouse-3>") 'bm-next-mouse)
-  ;; (global-set-key [left-margin mouse-1] 'bm-toggle-mouse)
-  (global-set-key [left-margin mouse-1] 'bm-toggle-mouse)
-  (global-set-key [left-margin mouse-3] 'bm-next-mouse)
+** bookmark使用
+*** Add a bookmark
+Open a file you want to bookmark. Then, Alt+x bookmark-set 【Ctrl+x r m】. It'll add current file to bookmark file. It will prompt you for a name.
+Bookmark can be a file or a directory.
 
-#+end_bookmark
+*** List Bookmarks
+Alt+x list-bookmark 【Ctrl+x r l】 → Open bookmark file.
+
+When in bookmark file, press Enter to open the item under cursor.
+
+*** Open a Bookmark
+To open a bookmarked item, Alt+x bookmark-jump 【Ctrl+x r b】, then type a name.
+
+You can type a asterisk * for wildcard. For example, “*today” will match “todo today”.
+
+*** Remove / Rename Bookmark
+When in the bookmark file:
+
+Type d to mark the current item for remove.
+Type x to remove all D marked ones.
+Type r to rename current item's title.
+Type s to save the change.
+
 
 ** smart-compile使用(smart-compile.el)
 
@@ -344,3 +349,19 @@ Or
 Alt+x apropos-variable
 Type “-hook”, press Enter.
 Note: A major mode may have more than 1 hook.
+
+** copy to the regiester (非常好用)
+Emacs has “registers” that allows you to store arbitrary text. It is like multiple-clipboards.
+
+Let's say you have 2 pieces of text: A and B. You need to paste A in some places, paste B in other places.
+
+Example use:
+
+Select a text, then Alt+x copy-to-register 【Ctrl+x r s】, then type 3. This will store the text in register “3”.
+To paste, Alt+x insert-register 【Ctrl+x r i】, then type 3. This will paste text stored in register “3”.
+Register name can be any single digit 0 to 9 or single letter a to z.
+
+http://ergoemacs.org/emacs_manual/emacs/Registers.html
+
+
+
