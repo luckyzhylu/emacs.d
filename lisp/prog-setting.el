@@ -1,11 +1,11 @@
 (add-hook 'after-init-hook 'global-company-mode)
-(require 'highlight-parentheses)
-(define-globalized-minor-mode global-highlight-parentheses-mode
-  highlight-parentheses-mode
-  (lambda ()
-    (highlight-parentheses-mode t)
-    (show-paren-mode t)))
-(global-highlight-parentheses-mode t)
+;; (require 'highlight-parentheses)
+;; (define-globalized-minor-mode global-highlight-parentheses-mode
+;;   highlight-parentheses-mode
+;;   (lambda ()
+;;     (highlight-parentheses-mode t)
+;;     (show-paren-mode t)))
+;; (global-highlight-parentheses-mode t)
 
 (defun my-whitespace-mode()
   (progn
@@ -28,9 +28,9 @@
 
 (my-whitespace-mode)
 
-(require 'indent-guide)
-(indent-guide-global-mode t)
-(global-aggressive-indent-mode t)
+;; (require 'indent-guide)
+;; (indent-guide-global-mode t)         ;; 对齐线,用处不大,容易产生干扰
+;; (global-aggressive-indent-mode t)    ;; 很不好用的插件
 
 ;;(set-face-background 'indent-guide-face "dimgray")
 ;; (setq indent-guide-char ":")
@@ -41,6 +41,14 @@
     (yas-global-mode 1)
     (ggtags-mode 1))
 
+  (when(require 'fill-column-indicator)
+    ;; (fci-mode t)
+    ;; (setq fci-rule-column 80)
+    )
+  (when (require 'ifdef)
+    ;; (global-set-key (kbd "C-c C-i") 'mark-ifdef)
+    )
+  
   ;; (whitespace-mode t) ;; 显示空白字符
   ;;  (delete-trailing-lines t)
   (whitespace-cleanup t)  ;; 清理空白字符
@@ -65,6 +73,21 @@
 (add-hook 'c-mode-common-hook 'my-private-program-hook)
 
 (define-key global-map "\C-xz" 'sourcepair-load)
+
+;; cscope
+(when (executable-find "cscope")
+  (when (require 'xcscope nil 'noerror)
+    (define-key cscope-list-entry-keymap [mouse-1]
+      'cscope-mouse-select-entry-other-window)))
+
+(setq auto-mode-alist
+      (append
+       '(("\\.\\(p\\(?:k[bg]\\|ls\\)\\|sql\\)\\'" . plsql-mode))
+       auto-mode-alist))
+;; (speedbar-add-supported-extension "pls")
+;; (speedbar-add-supported-extension "pkg")
+;; (speedbar-add-supported-extension "pkb")
+;; (speedbar-add-supported-extension "sql")
 
 ;;set-buffer-file-coding-system 可以把^M^L等字符转换为unix格式
 (provide 'prog-setting)

@@ -1,7 +1,6 @@
-# -*- mode: snippet -*-
-# name: insert source code
-# key: src
+#name : Source Code Block
+#contributor : Jonathan Arkell <jonnay@jonnay.net>
 # --
-#+begin_${1:elisp}
-$0
-#+end_$1
+#+BEGIN_SRC ${1:elisp}$>
+$0$>
+#+END_SRC$>

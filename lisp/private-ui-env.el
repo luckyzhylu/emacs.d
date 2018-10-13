@@ -17,7 +17,7 @@
         )
 
     ;; 设置 PATH, emacs 的shell使用
-    (setenv "PATH" (mapconcat 'identity mypaths ";"))
+    (setenv "PATH" (mapconcat 'identity mypaths ":"))
     ;; 设置exec-path, emacs自身运行是,需要使用(grep,ag,find等)命令时到这些目录去查找
     (setq exec-path (append mypaths (list "." exec-directory)))
     )
@@ -129,17 +129,51 @@
   "change default-directory by user input"
   (interactive)
   (setq default-directory (read-directory-name "Entry default directory:" nil)))
-(global-set-key [f1] 'change-default-directory)
+;; (global-set-key [f1] 'change-default-directory)
 
 (require 'browse-kill-ring)
 (global-set-key "\C-cy" 'browse-kill-ring)
-;; (global-set-key (kbd "C-m") 'set-mark-command) ;; set mark,define by zhangyunlu
+
+(defun xah-pop-local-mark-ring ()
+  "Move cursor to last mark position of current buffer.
+Call this repeatedly will cycle all positions in `mark-ring'.
+URL `http://ergoemacs.org/emacs/emacs_jump_to_previous_position.html'
+Version 2016-04-04"
+  (interactive)
+  (set-mark-command t))
+(global-set-key (kbd "<f1>") 'xah-pop-local-mark-ring)
+(global-set-key (kbd "<f2>") 'pop-global-mark)
+(global-set-key (kbd "\C-cm") 'set-mark-command) ;; set mark,define by zhangyunlu
+
+
 (setq mark-ring-max 6)
-(setq global-mark-ring-max 6)
+(setq global-mark-ring-max 16)
 
 (electric-pair-mode 1) ;; auto insert closing bracket,自动插入右括号
 
 ;; make cursor movement stop in between camelCase words.
 ;; (global-subword-mode 1) ;; 光标在大小写之间停住
-(provide 'private-ui-env)
 
+;;(require 'highlight-tail)     ;; 非常炫的插件
+;;(highlight-tail-mode t)
+
+;; (when (require 'highlight-symbol)
+;;   (global-set-key (kbd "C-c g d") 'highlight-symbol-at-point)
+;;   (global-set-key (kbd "s-j") 'highlight-symbol-next)
+;;   (global-set-key (kbd "s-k") 'highlight-symbol-prev)
+;;   ;; (global-set-key [(control meta f3)] 'highlight-symbol-query-replace)
+;;   )
+
+;;(require 'rainbow-mode) ;; 暂时没有明白效果是怎么样的
+
+(when (require 'recent-jump)
+  (setq recent-jump-threshold 4)
+  (setq recent-jump-ring-length 10)
+  (global-set-key (kbd "C-o") 'recent-jump-jump-backward)
+  (global-set-key (kbd "M-o") 'recent-jump-jump-forward)
+  )
+
+;;(when(require 'volatile-highlights) ;; 没有明白有什么作用
+;; (volatile-highlights-mode t))
+
+(provide 'private-ui-env)
