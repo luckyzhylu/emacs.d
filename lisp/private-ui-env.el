@@ -70,18 +70,18 @@
   )
 
 ;;(load-theme 'solarized t)
-(add-hook 'after-make-frame-functions
-  (lambda (frame)
-    (let ((mode (if (display-graphic-p frame) 'light 'dark)))
-       (set-frame-parameter frame 'background-mode mode)
-       (set-terminal-parameter frame 'background-mode mode))
-       (enable-theme 'solarized)))
+;; (add-hook 'after-make-frame-functions
+;;           (lambda (frame)
+;;             (let ((mode (if (display-graphic-p frame) 'light 'dark)))
+;;               (set-frame-parameter frame 'background-mode mode)
+;;               (set-terminal-parameter frame 'background-mode mode))
+;;             (enable-theme 'solarized)))
 
-(require 'doom-themes)
+;; (require 'doom-themes)
 
 ;; Global settings (defaults)
-(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-      doom-themes-enable-italic t) ; if nil, italics is universally disabled
+;; (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+;; doom-themes-enable-italic t) ; if nil, italics is universally disabled
 
 ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
 ;; may have their own settings.
@@ -125,10 +125,10 @@
 ;; (bookmark-bmenu-list)
 ;; (switch-to-buffer "*Bookmark List*")
 
-(defun change-default-directory()
-  "change default-directory by user input"
-  (interactive)
-  (setq default-directory (read-directory-name "Entry default directory:" nil)))
+;; (defun change-default-directory()
+;;   "change default-directory by user input"
+;;   (interactive)
+;;   (setq default-directory (read-directory-name "Entry default directory:" nil)))
 ;; (global-set-key [f1] 'change-default-directory)
 
 (require 'browse-kill-ring)
@@ -154,15 +154,15 @@ Version 2016-04-04"
 ;; make cursor movement stop in between camelCase words.
 ;; (global-subword-mode 1) ;; 光标在大小写之间停住
 
-;;(require 'highlight-tail)     ;; 非常炫的插件
-;;(highlight-tail-mode t)
+(require 'highlight-tail)     ;; 非常炫的插件
+(highlight-tail-mode t)
 
-;; (when (require 'highlight-symbol)
-;;   (global-set-key (kbd "C-c g d") 'highlight-symbol-at-point)
-;;   (global-set-key (kbd "s-j") 'highlight-symbol-next)
-;;   (global-set-key (kbd "s-k") 'highlight-symbol-prev)
-;;   ;; (global-set-key [(control meta f3)] 'highlight-symbol-query-replace)
-;;   )
+(when (require 'highlight-symbol)
+  (global-set-key (kbd "C-c g d") 'highlight-symbol-at-point)
+  (global-set-key (kbd "s-j") 'highlight-symbol-next)
+  (global-set-key (kbd "s-k") 'highlight-symbol-prev)
+  ;; (global-set-key [(control meta f3)] 'highlight-symbol-query-replace)
+  )
 
 ;;(require 'rainbow-mode) ;; 暂时没有明白效果是怎么样的
 

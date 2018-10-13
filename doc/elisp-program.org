@@ -20,12 +20,13 @@ progn return the last expression in its body, progn返回最后一条语句
 ** when expression
    when expression form is:
 (when test expr1 expr2 ...)
-#+begin_elisp
+#+BEGIN_SRC elisp
 (when t (progn (message "this is expr1111") (message "this is expr2")))
+#+END_SRC
+
 
 result: 
 "this is expr2"
-#+end_elisp
 
 ** while expression
 #+begin_elisp

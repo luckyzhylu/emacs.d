@@ -303,6 +303,8 @@ or
 
 ** company
 
+** 使用帮助手册
+man命令可以直接查找对应的技术手册
 * emacs常用插件说明
 ** 基础插件
   插件   用途
@@ -351,6 +353,7 @@ Type “-hook”, press Enter.
 Note: A major mode may have more than 1 hook.
 
 ** copy to the regiester (非常好用)
+
 Emacs has “registers” that allows you to store arbitrary text. It is like multiple-clipboards.
 
 Let's say you have 2 pieces of text: A and B. You need to paste A in some places, paste B in other places.
@@ -363,5 +366,24 @@ Register name can be any single digit 0 to 9 or single letter a to z.
 
 http://ergoemacs.org/emacs_manual/emacs/Registers.html
 
+
+
+* 自定义的按键
+** 光标移动
+s-m 括号,引号之前的调整
+
+** mark相关的操作
+设置全局最大的mark数为16个,文件内部的最大mark数为6个
+C-c m  设置mark
+<f1>   文件内部的mark跳转
+<f2>   全局的mark跳转
+
+** hiligth-tail
+   输入的时候，会有渐变效果，输入更有感觉。
+
+** highlight-symbol高亮符号字符串
+C-c g d 高亮光标所在的字符串
+s-j 查找下一个高亮的位置
+s-k 查找上一个高亮的位置
 
 

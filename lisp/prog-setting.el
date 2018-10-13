@@ -42,33 +42,35 @@
     (ggtags-mode 1))
 
   (when(require 'fill-column-indicator)
-    ;; (fci-mode t)
-    ;; (setq fci-rule-column 80)
+    (fci-mode t)
+    (setq fci-rule-column 80)
     )
   (when (require 'ifdef)
-    ;; (global-set-key (kbd "C-c C-i") 'mark-ifdef)
+    (global-set-key (kbd "C-c C-i") 'mark-ifdef)
     )
-  
+
   ;; (whitespace-mode t) ;; 显示空白字符
   ;;  (delete-trailing-lines t)
-  (whitespace-cleanup t)  ;; 清理空白字符
-  (delete-trailing-whitespace t)
+  ;; (whitespace-cleanup t)  ;; 清理空白字符,导致光标移动出错
+  ;; (delete-trailing-whitespace t)
+
   (electric-indent-mode 1) ;; make return key also do indent, globally
   (when (require 'doxymacs nil 'noerror)
     (doxymacs-mode t)
     (doxymacs-font-lock))
-  (when (require 'sourcepari nil 'noerror)
-    (setq sourcepair-source-extensions
-          '(".cpp" ".cxx" ".c++" ".CC" ".cc" ".C" ".c" ".mm" ".m"))
-    (setq sourcepair-header-extensions
-          '(".hpp" ".hxx" ".h++" ".HH" ".hh" ".H" ".h"))
-    (setq sourcepair-header-path '("." "include" ".." "../include" "../inc"
-                                   "../../include" "../../inc" "../*"))
-    (setq sourcepair-source-path '("." "src" ".." "../src" "../*"))
-    (setq sourcepair-recurse-ignore '("CVS" ".svn" ".hg" ".git" ".bzr"
-                                      "Obj" "Debug" "Release" "bin" "lib"))
-    (define-key c-mode-base-map (kdb "esc <f12>") 'sourcepair-load)
-    (define-key c-mode-base-map [f12] 'sourcepair-load))
+  ;; (when (require 'sourcepari nil 'noerror)
+  ;;   (setq sourcepair-source-extensions
+  ;;         '(".cpp" ".cxx" ".c++" ".CC" ".cc" ".C" ".c" ".mm" ".m"))
+  ;;   (setq sourcepair-header-extensions
+  ;;         '(".hpp" ".hxx" ".h++" ".HH" ".hh" ".H" ".h"))
+  ;;   (setq sourcepair-header-path '("." "include" ".." "../include" "../inc"
+  ;;                                  "../../include" "../../inc" "../*"))
+  ;;   (setq sourcepair-source-path '("." "src" ".." "../src" "../*"))
+  ;;   (setq sourcepair-recurse-ignore '("CVS" ".svn" ".hg" ".git" ".bzr"
+  ;;                                     "Obj" "Debug" "Release" "bin" "lib"))
+  ;;   (define-key c-mode-base-map (kdb "esc <f12>") 'sourcepair-load)
+  ;;   (define-key c-mode-base-map [f12] 'sourcepair-load))
+  ;;
   )
 (add-hook 'c-mode-common-hook 'my-private-program-hook)
 
@@ -79,6 +81,7 @@
   (when (require 'xcscope nil 'noerror)
     (define-key cscope-list-entry-keymap [mouse-1]
       'cscope-mouse-select-entry-other-window)))
+(require 'xcscope)
 
 (setq auto-mode-alist
       (append
