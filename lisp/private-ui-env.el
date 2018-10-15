@@ -77,7 +77,7 @@
 ;;               (set-terminal-parameter frame 'background-mode mode))
 ;;             (enable-theme 'solarized)))
 
-;; (require 'doom-themes)
+(require 'doom-themes)
 
 ;; Global settings (defaults)
 ;; (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -105,6 +105,13 @@
 ;; (doom-themes-treemacs-config)
 ;; Corrects (and improves) org-mode's native fontification.
 ;; (doom-themes-org-config)
+
+;; this is molokai theme
+;; (require 'color-theme-molokai)
+;; (load "~/.emacs.d/lisp/molokai/color-theme-molokai.el")
+;; (load "~/.emacs.d/lisp/molokai/molokai-theme.el")
+;; (color-theme-molokai)
+
 (if (ido-mode t)
     (progn (setq ido-max-window-height 20)
            (setq max-mini-window-height 5))) ;; 不能实现赋值,zhangyunlu
@@ -125,11 +132,6 @@
 ;; (bookmark-bmenu-list)
 ;; (switch-to-buffer "*Bookmark List*")
 
-;; (defun change-default-directory()
-;;   "change default-directory by user input"
-;;   (interactive)
-;;   (setq default-directory (read-directory-name "Entry default directory:" nil)))
-;; (global-set-key [f1] 'change-default-directory)
 
 (require 'browse-kill-ring)
 (global-set-key "\C-cy" 'browse-kill-ring)
@@ -175,5 +177,31 @@ Version 2016-04-04"
 
 ;;(when(require 'volatile-highlights) ;; 没有明白有什么作用
 ;; (volatile-highlights-mode t))
+
+(require 'smex) ; Not needed if you use package.el
+(smex-initialize) ; Can be omitted. This might cause a (minimal) delay
+                                        ; when Smex is auto-initialized on its first run.
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;; This is your old M-x.
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+
+
+;; ace-jump-mode
+(autoload
+  'ace-jump-mode
+  "ace-jump-mode"
+  "Emacs quick move minor mode"
+  t)
+(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+
+(autoload
+  'ace-jump-mode-pop-mark
+  "ace-jump-mode"
+  "Ace jump back:-)"
+  t)
+(eval-after-load "ace-jump-mode"
+  '(ace-jump-mode-enable-mark-sync))
+(define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
 
 (provide 'private-ui-env)

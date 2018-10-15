@@ -105,133 +105,133 @@ Type s to save the change.
 
 ** ifdef使用(ifdef.el,hide-ifdefs,show-ifdefs)
 *** Hide-Ifdef 辅助模式
-  
+
 在 C mode 或者 C++ mode 下启用 hide-ifdef-mode 可以帮助我们隐藏那些讨厌
 的 #ifdef ... #endif 代码块，使程序更容易阅读。
-  
+
 当我们阅读源代码的时候，尤其是阅读那些历史很悠久的源代码的时候，经常看到
 其中插入了很多的条件预处理指令，可移植性越强的程序，条件预处理指令就越多，
 这些指令把源文件分割成了很多碎片，阅读时会分散我们的注意力，使我们难于看
 清程序的整体结构。
-  
+
 `hide-ifdef-mode' 就是用来对付这样的源代码文件的，如果我们打开这个辅助模
 式，就可以把那些条件不成立的代码块隐藏起来，使程序的结构更加清晰。
-  
+
 **** 条件编译指令的作用
-  
+
 条件编译指令经常用来处理可移植性问题，比如对于不同的平台使用不同的代码，
 象下面这样：
-  
+
 #ifdef VMS
 #include <ssdef.h>
 #endif
-  
+
 #ifdef BSD_SYSTEM
 #include <sys/ioctl.h>
 #endif
-  
+
 #ifdef WINDOWSNT
 #include <fcntl.h>
 #include <windows.h>
 #endif
-  
+
 还可以用条件编译指令建立起公共的 C 和 C++ 头文件：
-  
+
 #ifdef __cplusplus
 namespace std {
          extern "C" {
 #endif
-  
+
 char* func_1(char*, const char*);
 int func_2(const char*);
 double func_3(int n);
-  
+
 #ifdef __cplusplus
          }
 }
 #endif
-  
+
 有时候用 #if 0 ... #endif 来注释掉大块代码：
-  
+
 #if 0
 int obsolete_fonc(int n)
 {
          return n*n + 1;
 }
 #endif
-  
+
 这是一种很常用的技巧，在自由软件的源代码中经常出现，采用这种方法进行注释
 恢复起来很方便。
-  
+
 使用 `hide-ifdef-mode' 可以把那些条件不成立、被预处理器忽略掉的代码块会自
 动隐藏起来，显示成缩略符号(...)，这样代码就会清爽很多，更容易阅读。
-  
+
 **** 常用命令
-  
+
 启用 `hide-ifdef-mode' 的命令是：
-  
+
 `M-x hide-ifdef-mode'
-  
+
 启用了这个辅助模式之后，就可以用下面两个命令隐藏或显示代码块：
-  
+
 M-x hide-ifdefs  (或者 C-c @ h) 隐藏代码
 M-x show-ifdefs  (或者 C-c @ s) 显示代码
-  
+
 需要注意的是 Emacs 并不能主动地根据文件中的 `#define ...' 找出哪那些符号
 是已定义的，哪些符号是为定义的，因此需要我们用下面两个命令手工定义[1]:
-  
+
 C-c @ d         hide-ifdef-define 定义一个符号
 C-c @ u         hide-ifdef-undef  取消符号定义
-  
+
 另外，也可以不管符合是否是有定义的，强制隐藏或显示代码块：
-  
+
 C-c @ C-d       hide-ifdef-block 隐藏一块代码，不论符合是否已定义
 C-c @ C-s       show-ifdef-block 显示隐藏的代码，不论符合是否已定义
-  
+
 **** 可以设置的变量
-  
+
 下面几个变量会影响隐藏的方式：
-  
+
 ***** `hide-ifdef-lines'
 如果这个变量的值为真，那么 #if, #ifdef, #ifndef, #else, 和 #endif 这些预
 处理命令本身也会隐藏起来。
-  
+
 也就是说，如果把这个变量的值设置为真：
 (setq hide-ifdef-lines t)
 那么隐藏的效果是：
-  
+
 #ifdef WINDOWSNT          |    ...
 #include <fcntl.h>        |    ...
-#include <windows.h>      |    
-#endif                    |  
-  
+#include <windows.h>      |
+#endif                    |
+
 如果设置为 nil:
 (setq hide-ifdef-lines nil)
 那么隐藏的效果是：
-  
-#ifdef WINDOWSNT          |   #ifdef WINDOWSNT...    
+
+#ifdef WINDOWSNT          |   #ifdef WINDOWSNT...
 #include <fcntl.h>        |   #endif
-#include <windows.h>      |    
+#include <windows.h>      |
 #endif                    |
-  
+
 ***** `hide-ifdef-initially'
 这个变量决定了刚进入 Hide-Ifdef 辅助模式时，是否立即处于隐藏状态，如果这
 个变量的值为 nil，那么进入 Hide-Ifdef 辅助模式以后，需要自己发出
 `hide-ifdefs' (C-c @ h) 命令，才隐藏代码。
-  
+
 ***** `hide-ifdef-read-only'
 如果这个变量的值为 non-nil，那么处于隐藏模式时，buffer会变成只读的，这样
 可以避免误删代码。在只读和非只读状态之间切换可以使用这个命令：
 `hide-ifdef-toggle-read-only' (C-c @ C-q)
-  
+
 ***** `hide-ifdef-env'
 这是个关联链表，其中保存着当前 buffer 中已定义的符号。我们可以利用这个变
 量为定义那些全局的符号，例如，对于linux平台可以定义 GNU_LINUX，对于 C++
 程序可以定义 __cplusplus 等：
-(setq hide-ifdef-env '((GNU_LINUX . t)  
+(setq hide-ifdef-env '((GNU_LINUX . t)
                         (__GNUC__ . t)
                         (__cplusplus . t)))
-  
+
 ***** `hide-ifdef-define-alist'
 我们可以事先定义几个链表，每个链表中保存需要定义的符号，例如下面的语句定
 义了两个符号链表 list1 和 list2，然后用 hide-ifdef-use-define-alist 选择
@@ -242,7 +242,7 @@ C-c @ C-s       show-ifdef-block 显示隐藏的代码，不论符合是否已�
 (hide-ifdef-use-define-alist 'list2) ; use list2 by default
 在工作过程中，我们可以 `hide-ifdef-use-define-alist' (C-c @ U) 命令切换，
 选择使用自己定义的其它链表，比如 list1。
-  
+
 **** 配置示例
 (add-hook 'hide-ifdef-mode-hook
       (lambda ()
@@ -250,7 +250,7 @@ C-c @ C-s       show-ifdef-block 显示隐藏的代码，不论符合是否已�
             (setq hide-ifdef-define-alist
                  '((list1 ONE TWO)
                    (list2 TWO THREE))))
-          (hide-ifdef-use-define-alist 'list2))) ; use list2 by default 
+          (hide-ifdef-use-define-alist 'list2))) ; use list2 by default
 
 
 ** doc-mode/doxymacs-mode使用
@@ -303,11 +303,60 @@ or
 
 ** company
 
+** ace-windows插件
+ M-p 打开ace-windows插件
+可以快速在多个窗口调整
 ** 使用帮助手册
 man命令可以直接查找对应的技术手册
+** org-mode
+*** 插入源代码
+先使用< s tab 会再光标出插入SRC,在使用C-M-i，可以选择插入的语言。
+*** org-mode导出
+In emacs, Alt+x org-export-dispatch 【Ctrl+c Ctrl+e】 to export. To export to HTML, the key is 【Ctrl+c Ctrl+e h h】
+
+*** org-mode任务管理
+TODO Heading
+
+To mark a heading as todo item, start it with “TODO”.
+
+* TODO call mom for bday
+* DONE finish coding absca
+Place your cursor on a heading, 【Shift+→】 → change heading among 3 states: {TODO, DONE, normal}. It will add the word “TODO” or “DONE” in the heading.
+【Ctrl+c Ctrl+v】 → view just todo headings.
+Insert Date/Time
+
+【Ctrl+c .】 → insert a date like this: <2010-07-31 Sat>.
+【Ctrl+u Ctrl+c .】 → insert datetime, like this: <2012-02-09 Thu 03:32>.
+Move cursor into a date, then press 【Shift+↑】 to increase any {year, month, day, hour}. Press 【Shift+↓】 to decrease.
+Tags
+
+Each heading may have keywords, called “tags”.
+
+For example: work, family, urgent, coding….
+
+The syntax for tag is any word between colon, like this: :something: or :this:that:. They are usually placed at end of the line. Like this:
+
+* call mom for bday. :family:...
+* finish writing the org-mode tutorial. :emacs:work:
+Tag name characters must be any alphabets A to Z, a to z, or digits 0 to 9, or _, @.
+
+Tag name cannot have space, nor hyphen -.
+
+Tags are inherited from parent nodes, in the sense that when you search for a tag, a heading with that tag will show but also all its children, even if the children's headings do not contain that tag.
+
+【Ctrl+c Ctrl+q】 → insert a tag. You can also just type the tag yourself.
+
+Show Headings by Tag
+
+【Ctrl+c \】 → show only headings of a given tag.
+
+** magit
+http://ergoemacs.org/emacs/emacs_magit-mode_tutorial.html
+
 * emacs常用插件说明
 ** 基础插件
   插件   用途
+  helm/helm-ag
   dracula-theme / molokai-theme          配色
   neotree  文件列表
   super-save   自动保存
@@ -322,6 +371,12 @@ man命令可以直接查找对应的技术手册
   exec-path-from-shell  加载shell的path定义
   avy, ag, ace-jump-mode  搜索
   iedit  多光标
+  ag 快速查找
+  [[https://github.com/syohex/emacs-helm-ag]]
+
+  auto-yasnippet
+  [[https://github.com/abo-abo/auto-yasnippet]]
+
 ** 开发插件
   editorconfig  代码格式
   yasnippet  代码片段
@@ -354,6 +409,7 @@ Note: A major mode may have more than 1 hook.
 
 ** copy to the regiester (非常好用)
 
+
 Emacs has “registers” that allows you to store arbitrary text. It is like multiple-clipboards.
 
 Let's say you have 2 pieces of text: A and B. You need to paste A in some places, paste B in other places.
@@ -385,5 +441,3 @@ C-c m  设置mark
 C-c g d 高亮光标所在的字符串
 s-j 查找下一个高亮的位置
 s-k 查找上一个高亮的位置
-
-

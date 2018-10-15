@@ -109,4 +109,10 @@ Version 2016-11-22"
   (global-undo-tree-mode)
   )
 
+;; ace-window
+(global-set-key (kbd "M-p") 'ace-window)
+(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+(setq aw-background nil)
+
+
 (provide 'private-key-bind)

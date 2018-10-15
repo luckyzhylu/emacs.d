@@ -1,6 +1,6 @@
 #name : Source Code Block
 #contributor : Jonathan Arkell <jonnay@jonnay.net>
 # --
-#+BEGIN_SRC ${1:elisp}$>
+#+BEGIN_SRC ${1:emacs-lisp}$>
 $0$>
 #+END_SRC$>
