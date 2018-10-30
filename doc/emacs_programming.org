@@ -1,3 +1,4 @@
+
 * 使用emacs编程
 ** tabbar使用
 #+begin_tabbar_usage mode
@@ -318,7 +319,6 @@ In emacs, Alt+x org-export-dispatch 【Ctrl+c Ctrl+e】 to export. To export to 
 TODO Heading
 
 To mark a heading as todo item, start it with “TODO”.
-
 * TODO call mom for bday
 * DONE finish coding absca
 Place your cursor on a heading, 【Shift+→】 → change heading among 3 states: {TODO, DONE, normal}. It will add the word “TODO” or “DONE” in the heading.
@@ -397,6 +397,12 @@ http://ergoemacs.org/emacs/emacs_magit-mode_tutorial.html
   web-mode, emmet-mode  web
 
 * emacs基础
+** 启动elisp的交互命令行
+   you can Alt+x ielm. It will start a interactive elisp command line interface.
+   
+   运行某一段elisp，M-x eval-region
+   查找某一个函数：M-x:describe-function 或者使用快捷键C-x h
+   
 ** 列出emacs所有的hook
 Alt+x apropos-variable then type “-hook”.
 How to find the name of hook?

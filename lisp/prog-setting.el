@@ -1,11 +1,11 @@
 (add-hook 'after-init-hook 'global-company-mode)
-;; (require 'highlight-parentheses)
-;; (define-globalized-minor-mode global-highlight-parentheses-mode
-;;   highlight-parentheses-mode
-;;   (lambda ()
-;;     (highlight-parentheses-mode t)
-;;     (show-paren-mode t)))
-;; (global-highlight-parentheses-mode t)
+(require 'highlight-parentheses)
+(define-globalized-minor-mode global-highlight-parentheses-mode
+  highlight-parentheses-mode
+  (lambda ()
+    (highlight-parentheses-mode t)
+    (show-paren-mode t)))
+(global-highlight-parentheses-mode t)
 
 (defun my-whitespace-mode()
   (progn
@@ -36,25 +36,52 @@
 ;;(set-face-background 'indent-guide-face "dimgray")
 ;; (setq indent-guide-char ":")
 
+(defun zyl-delete-trailing-white()
+  ;; (whitespace-cleanup t)  ;; 清理空白字符,导致光标移动出错
+  ;; (delete-trailing-lines t)  ;; 删除空白行
+  ;; (delete-trailing-whitespace t)
+  )
+
+(require 'eassit)
+(defun zyl-eassit-hook()
+  (define-key c-mode-base-map (kbd "C-c o") 'eassist-switch-h-cpp)
+  (define-key c-mode-base-map (kbd "C-c l") 'eassist-list-methods)
+  )
+;; (add-hook 'c-mode-common-hook 'zyl-eassit-hook)
+;; (setq company-backends '((company-files company-keywords  company-capf company-yasnippet)
+;;                          (company-abbrev company-dabbrev)))
+
+(add-hook 'c-mode-common-hook
+          (lambda()
+            (add-to-list (make-local-variable 'company-backends) 
+                         ((company-clang company-gtags company-etags company-dabbrev-code company-semantic
+                                         company-files company-keywords  company-capf company-yasnippet)
+                          (company-abbrev company-dabbrev))
+                         )
+            '(company-show-numbers t)
+            ))
+;; (add-hook 'python-mode-hook
+;;           (lambda()
+;;             (add-to-list (make-local-variable 'company-backends) 'company-anaconda)))x
+;; (global-set-key "\t" 'company-complete-common)
+;; (global-set-key)
 
 (defun my-private-program-hook()
   (when (derived-mode-p 'c-mode 'c++-mode)
     (yas-global-mode 1)
     (ggtags-mode 1))
-
+  (add-hook 'before-save-hook 'zyl-delete-trailing-white)
+  (setq c-default-style "linux"  c-basic-offset 4)
+  (setq-default indent-tabs-mode nil) ;; 不使用tab
+  (setq default-tab-width 4)
+  (setq default-fill-column 80)  ;; 默认显示 80列就换行
+  
   (when(require 'fill-column-indicator)
     (fci-mode t)
     (setq fci-rule-column 80)
     )
   (when (require 'ifdef)
     (global-set-key (kbd "C-c C-i") 'mark-ifdef)
-
-    (add-hook 'before-save-hook '
-              (lambda()
-                ;; (whitespace-cleanup t)  ;; 清理空白字符,导致光标移动出错
-                (delete-trailing-lines)  ;; 删除空白行
-                (delete-trailing-whitespace) ;; 删除空白字符
-                ))
     )
 
 
