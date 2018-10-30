@@ -48,6 +48,9 @@
 ;; when a file is updated outside emacs, make it update if it's already opened in emacs
 (global-auto-revert-mode t) ;; 自动更新被变更的文件
 
+;; 设置emacs字体
+(set-default-font "-*-Menlo-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1")
+
 ;; keep a list of recently opened files
 (require 'recentf)
 (recentf-mode 1)
