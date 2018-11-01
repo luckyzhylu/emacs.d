@@ -30,8 +30,8 @@
 (slime-setup '(slime-fancy)) ;;如果不加'(slime-fancy)，slime的所有加载信息都会显示出来
 
 ;; 设置默认的窗口大小
-(setq default-frame-alist
-      '((height . 60) (width . 160) (menu-bar-lines . 20) (tool-bar-lines . 0)))
+;; (setq default-frame-alist '((height . 60) (width . 160) (menu-bar-lines . 20) (tool-bar-lines . 0)))
+(setq initial-frame-alist (quote ((fullscreen . maximized))))
 (tool-bar-mode 0)
 ;; (menu-bar-mode 0)
 (scroll-bar-mode 1)
@@ -54,9 +54,11 @@
 ;; keep a list of recently opened files
 (require 'recentf)
 (recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(global-set-key (kbd "C-x C-r") 'recentf-open-files)
 
 ;; save/restore opened files
-(desktop-save-mode 1)
+;; (desktop-save-mode 1)
 
 (progn
   (setq-default indent-tabs-mode nil)
@@ -80,7 +82,7 @@
 ;;               (set-terminal-parameter frame 'background-mode mode))
 ;;             (enable-theme 'solarized)))
 
-(require 'doom-themes)
+;; (require 'doom-themes)
 
 ;; Global settings (defaults)
 ;; (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -136,6 +138,12 @@
 ;; (switch-to-buffer "*Bookmark List*")
 
 
+(delete-selection-mode t)
+
+
+;; (require 'org-mode)
+(setq org-src-fontify-natively t)  ;; org-mode模式下，显示各类语言的语法高亮
+
 (require 'browse-kill-ring)
 (global-set-key "\C-cy" 'browse-kill-ring)
 
@@ -159,8 +167,8 @@ Version 2016-04-04"
 ;; make cursor movement stop in between camelCase words.
 ;; (global-subword-mode 1) ;; 光标在大小写之间停住
 
-(require 'highlight-tail)     ;; 非常炫的插件
-(highlight-tail-mode t)
+;; (require 'highlight-tail)     ;; 非常炫的插件
+;; (highlight-tail-mode t)
 
 (when (require 'highlight-symbol)
   (global-set-key (kbd "C-c g d") 'highlight-symbol-at-point)
@@ -181,14 +189,14 @@ Version 2016-04-04"
 ;;(when(require 'volatile-highlights) ;; 没有明白有什么作用
 ;; (volatile-highlights-mode t))
 
-(require 'smex) ; Not needed if you use package.el
-(smex-initialize) ; Can be omitted. This might cause a (minimal) delay
-                                        ; when Smex is auto-initialized on its first run.
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-;; This is your old M-x.
-(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+;; (require 'smex) ; Not needed if you use package.el
+;; (smex-initialize) ; Can be omitted. This might cause a (minimal) delay
 
+;; when Smex is auto-initialized on its first run.
+;; (global-set-key (kbd "M-x") 'smex)
+;; (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;; This is your old M-x.
+;; (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
 ;; ace-jump-mode
 (autoload

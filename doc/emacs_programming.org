@@ -431,6 +431,7 @@ http://ergoemacs.org/emacs_manual/emacs/Registers.html
 
 
 * 自定义的按键
+
 ** 光标移动
 s-m 括号,引号之前的调整
 
@@ -446,4 +447,5 @@ C-c m  设置mark
 ** highlight-symbol高亮符号字符串
 C-c g d 高亮光标所在的字符串
 s-j 查找下一个高亮的位置
-s-k 查找上一个高亮的位置
+s-k 查找上一个高亮
+** C-h m查看当前的major mode相关信息
