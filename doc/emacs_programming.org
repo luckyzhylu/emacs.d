@@ -449,3 +449,6 @@ C-c g d 高亮光标所在的字符串
 s-j 查找下一个高亮的位置
 s-k 查找上一个高亮
 ** C-h m查看当前的major mode相关信息
+** Cask文件格式
+(depends-on "monokai-theme" :git "https://github.com/oneKelvinSmith/monokai-emacs/releases" :ref "02c5f5d")
+cask可以指定安装git对应的版本号。
