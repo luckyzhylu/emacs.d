@@ -62,6 +62,7 @@
 (depends-on "python-mode")
 (depends-on "pythonic")
 (depends-on "rainbow-delimiters")
+(depends-on "ranger")
 (depends-on "s")
 (depends-on "shut-up")
 (depends-on "smartparens")

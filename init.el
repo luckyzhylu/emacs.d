@@ -49,33 +49,6 @@
 ;;                        pallet
 ;;                        ivy-hydra
 ;;                        move-text
-;;                        helm-ag
-;;                        goto-chg
-;;                        powerline
-;;                        which-key
-;;                        flx-ido
-;;                        ido-vertical-mode
-;;                        auto-highlight-symbol
-;;                        auto-yasnippet
-;;                        company-c-headers
-;;                        python-mode
-;;                        highlight-symbol
-;;                        smex
-;;                        dsvn
-;;                        google-c-style
-;;                        undo-tree
-;;                        anaconda-mode
-;;                        ;; company-anaconda  python补全
-;;                        smartparens
-;;                        use-package
-;;                        highlight-parentheses
-;;                        yasnippet                    ;; OK
-;;                        yasnippet-snippets           ;; snippets move to .emacs.d/
-;;                        company-shell
-;;                        cask
-;;                        undo-tree
-;;                        monokai-theme
-;;                        company
 ;;                        helm-projectile
 ;;                        ivy
 ;;                        counsel
@@ -138,6 +111,9 @@
 (global-set-key (kbd "<C-f2>") 'bm-toggle)
 (global-set-key (kbd "<f2>")   'bm-next)
 (global-set-key (kbd "<S-f2>") 'bm-previous)
+
+(require 'ranger)
+(ranger-override-dired-mode t)
 
 ;; (global-set-key (kbd "<left-fringe> <mouse-5>") 'bm-next-mouse)
 ;; (global-set-key (kbd "<left-fringe> <mouse-4>") 'bm-previous-mouse)
