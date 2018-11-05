@@ -1,6 +1,7 @@
-#contributor : Meteor Liu <meteor1113@gmail.com>
-#name : until ... done
+# -*- mode: snippet -*-
+# name: until loop
+# key: until
 # --
-until [[ ${condition} ]]; do
-    ${#statements}
+until ${1:cond}; do
+    $0
 done

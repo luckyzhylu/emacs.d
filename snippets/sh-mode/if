@@ -1,6 +1,8 @@
-#contributor : Meteor Liu <meteor1113@gmail.com>
-#name : if ... fi
+# -*- mode: snippet -*-
+# name: if
+# key: if
 # --
-if [[ ${condition} ]]; then
-    ${#statements}
+if ${1:[ -f file]}
+   then ${2:do}
 fi
+$0

@@ -1,10 +1,10 @@
-#contributor : Meteor Liu <meteor1113@gmail.com>
-#name : try { ... } catch (...) { ... }
+# -*- mode: snippet -*-
+# name: try
+# key: try
+# a bit too intrusive now still, not always I want to do this
 # --
-try
-{
+try {
     $0
-}
-catch (...)
-{
+} catch (${1:type}) {
+
 }
