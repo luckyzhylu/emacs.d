@@ -63,6 +63,7 @@
 ;;                        fill-column-indicator
 ;;                        browse-kill-ring
 ;;                        bm
+;;                        helm-bm
 ;;                        helm-cscope
 ;;                        xcscope
 ;;                        yatemplate
@@ -106,14 +107,21 @@
 ;; 暂时还不知道怎么使用
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
+(global-set-key (kbd "C-c b") 'helm-bm)
 
-(require 'bm)
-(global-set-key (kbd "<C-f2>") 'bm-toggle)
-(global-set-key (kbd "<f2>")   'bm-next)
-(global-set-key (kbd "<S-f2>") 'bm-previous)
 
 (require 'ranger)
 (ranger-override-dired-mode t)
+
+
+;; dired mode文件夹直接拷贝和删除,不询问
+(setq dired-recursive-deletes 'always)
+(setq dired-recursive-copies 'always)
+;; dired mode重用缓冲区
+(put 'dired-find-alternate-file 'disabled nil)
+;; 延迟加载
+(with-eval-after-load 'dired
+    (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file))
 
 ;; (global-set-key (kbd "<left-fringe> <mouse-5>") 'bm-next-mouse)
 ;; (global-set-key (kbd "<left-fringe> <mouse-4>") 'bm-previous-mouse)
@@ -260,6 +268,7 @@
 (global-hungry-delete-mode t)
 
 (require 'xcscope)
+(cscope-setup)
 
 ;; https://github.com/joaotavora/yasnippet
 ;;~/.emacs.d/snippets
@@ -324,7 +333,17 @@
                                           (ggtags-mode t)
                                           (fci-mode t)
                                           (setq fci-rule-column 80)
-                                              )))
+                                          )))
+
+(add-hook 'c-mode-common-hook 'helm-cscope-mode)
+(add-hook 'helm-cscope-mode-hook
+          (lambda ()
+            ;; 暂时还使用global来定位,cscope有可能会没有cscope的数据库文件
+            ;; (local-set-key (kbd "M-.") 'helm-cscope-find-global-definition)
+            (local-set-key (kbd "M-@") 'helm-cscope-find-calling-this-function)
+            (local-set-key (kbd "M-s") 'helm-cscope-find-this-symbol)
+            (local-set-key (kbd "M-c") 'helm-cscope-find-called-function)
+            (local-set-key (kbd "M-,") 'helm-cscope-pop-mark)))
 
 ;; (when (or (fboundp 'c-mode) (fboundp 'c++-mode)
 ;;           (ggtags-mode t)
@@ -332,6 +351,18 @@
 ;; (setq-default c-basic-offset 4)
 ;;自动的在文件末增加一新行
 ;; (setq require-final-newline t)
+
+
+;; 光标在括号内时就高亮包含内容的两个括号
+(define-advice show-paren-function (:around (fn) fix-show-paren-function)
+  "Highlight enclosing parens."
+  (cond ((looking-at-p "\\s(") (funcall fn))
+        (t (save-excursion
+         (ignore-errors (backward-up-list))
+         (funcall fn)))))
+
+;; 可以使鼠标在括号上是高亮其所匹配的另一半括号
+(show-paren-mode t)
 
 
 ;; 括号配对插入

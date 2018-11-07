@@ -41,8 +41,9 @@ tabbar-press-scroll-right (C-c <C-next>)
 
 ** bookmark使用
 *** Add a bookmark
-Open a file you want to bookmark. Then, Alt+x bookmark-set 【Ctrl+x r m】. It'll add current file to bookmark file. It will prompt you for a name.
-Bookmark can be a file or a directory.
+Open a file you want to bookmark. Then, Alt+x bookmark-set
+【Ctrl+x r m】. It'll add current file to bookmark file.
+It will prompt you for a name. Bookmark can be a file or a directory.
 
 *** List Bookmarks
 Alt+x list-bookmark 【Ctrl+x r l】 → Open bookmark file.
@@ -362,7 +363,7 @@ http://ergoemacs.org/emacs/emacs_magit-mode_tutorial.html
   super-save   自动保存
   popwin  窗口操作
   window-numbering  窗口跳转
-  dired+  目录增强
+
   direx  打开当前文件目录
   crux  打开应用
   undo-tree  撤销
@@ -376,6 +377,28 @@ http://ergoemacs.org/emacs/emacs_magit-mode_tutorial.html
 
   auto-yasnippet
   [[https://github.com/abo-abo/auto-yasnippet]]
+*** dired
+使用 C-x d 就可以进入Dired Mode，这个模式类似于图形界面系统中的资源管理器。
+你可以在其中查看文件和目录的详细信息，对他们进行各种操作，
+甚至复制粘贴缓冲区中的内 容。下面是一些常用的操作（下面的所有键均需在 Dired Mode 下使用），
++ 创建目录
+g 刷新目录
+C 拷贝
+D 删除
+R 重命名
+d 标记删除
+u 取消标记
+x 执行所有的标记
+j k 上下移动光标
+h l 返回上级目录、进入目录
+
+
+*** bm/helm-bm
+bm可以设置可视化的bookmark
+helm-bm用于查看,定位可视化bm
+<C>-f2 当前行设置bookmark
+C-c b 显示所有设置的bookmark,并可以输入关键词进行搜索bookmark
+
 
 ** 开发插件
   editorconfig  代码格式

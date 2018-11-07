@@ -38,6 +38,7 @@
 (depends-on "graphql")
 (depends-on "helm")
 (depends-on "helm-ag")
+(depends-on "helm-bm")
 (depends-on "helm-core")
 (depends-on "helm-cscope")
 (depends-on "helm-projectile")
