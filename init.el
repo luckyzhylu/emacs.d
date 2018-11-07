@@ -364,6 +364,7 @@
 ;; 可以使鼠标在括号上是高亮其所匹配的另一半括号
 (show-paren-mode t)
 
+(require 'highlight-parentheses)
 
 ;; 括号配对插入
 (use-package smartparens
@@ -418,3 +419,4 @@
 ;; emacs定制的变量放到my-custome.el中,每次启动后加载my-custom.el
 (setq custom-file (expand-file-name "lisp/my-custom.el" user-emacs-directory))
 (load-file custom-file)
+(require 'prog-setting)
