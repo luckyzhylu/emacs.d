@@ -107,6 +107,12 @@
 ;; 暂时还不知道怎么使用
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
+
+;; bm配置
+(require 'bm)
+(global-set-key (kbd "<C-f2>") 'bm-toggle)
+(global-set-key (kbd "<f2>")   'bm-next)
+(global-set-key (kbd "<S-f2>") 'bm-previous)
 (global-set-key (kbd "C-c b") 'helm-bm)
 
 
@@ -236,13 +242,24 @@
   )
 
 
-(require 'projectile)
+;; (require 'projectile)
 ;; 默认全局使用
-(projectile-global-mode)
+;; (projectile-global-mode)
 ;; 默认打开缓存
-(setq projectile-enable-caching t)
+;; (setq projectile-enable-caching t)
 ;; 使用f5键打开默认文件搜索
-(global-set-key [f5] 'projectile-find-file)
+;; (global-set-key [f5] 'projectile-find-file)
+
+(use-package projectile
+  :init
+  :config
+  (progn
+    (setq projectile-enable-caching t)
+    (projectile-global-mode t)
+    )
+  :bind
+  ([f5] . 'projectile-find-file)
+  )
 
 ;; ace-window
 (global-set-key (kbd "M-p") 'ace-window)
@@ -267,13 +284,20 @@
 ;; (global-company-mode t)
 (global-hungry-delete-mode t)
 
-(require 'xcscope)
-(cscope-setup)
+;; (require 'xcscope)
+;; (cscope-setup)
+
+(use-package xcscope
+  :init
+  :config
+  (cscope-setup))
 
 ;; https://github.com/joaotavora/yasnippet
 ;;~/.emacs.d/snippets
-(require 'yasnippet)
-(yas-global-mode 1)
+(use-package yasnippet
+  :config
+  (yas-global-mode t))
+
 
 ;; 显示空白字符,删除末尾的空白字符
 (global-whitespace-mode t)
@@ -304,12 +328,15 @@
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
 
+(require 'zoom)
+
 
 ;; keep a list of recently opened files
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
 (global-set-key (kbd "C-x C-r") 'recentf-open-files)
+
 
 
 ;; C/C++代码风格设置
@@ -384,11 +411,17 @@
   (smartparens-global-mode +1)
   )
 
+(require 'smart-hungry-delete)
+(smart-hungry-delete-add-default-hooks)
+(global-set-key (kbd "<backspace>") 'smart-hungry-delete-backward-char)
+(global-set-key (kbd "C-d") 'smart-hungry-delete-forward-char)
+
 ;; (add-to-list'package-archives '("melpa-stable" . "https://stable.melpa.org/packages")t)xe
 
 ;; (add-to-list'package-archives '("melpa" . "http://elpa.emacs-china.org/gnu/") t)
 ;; (add-to-list'package-archives '("melpa" . "http://elpa.emacs-china.org/melpa-stable/")t)
 
+(global-set-key (kbd "s-<backspace>") 'hungry-delete-backward)
 
 ;; 指定major-mode
 ;; (setq auto-mode-alist
@@ -415,6 +448,43 @@
                (setq mage-init-time
                      (float-time (time-subtract (current-time) before-init-time))))))
 (add-hook 'emacs-startup-hook #'mage-display-benchmark)
+
+
+;; zoom;设置多窗口的黄金分割
+(custom-set-variables
+ '(zoom-mode t))
+(custom-set-variables
+ '(zoom-size '(0.618 . 0.618)))
+
+
+(defun
+    size-callback ()
+  (cond ((> (frame-pixel-width) 1280) '(90 . 0.75))
+        (t                            '(0.5 . 0.5))))
+(custom-set-variables
+ '(zoom-ignored-major-modes '(dired-mode))
+ '(zoom-ignored-buffer-names '("zoom.el"))
+ '(zoom-ignored-buffer-name-regexps '("undo-tree"))
+ '(zoom-ignore-predicates
+   '((lambda () (> (count-lines (point-min) (point-max)) 20)))))
+
+(custom-set-variables '(temp-buffer-resize-mode t))
+
+;; (global-set-key (kbd "C-x +") 'zoom)
+
+;; ;; zoom-window
+;; (require 'zoom-window)
+;; (global-set-key (kbd "C-x C-z") 'zoom-window-zoom)
+;; (custom-set-variables
+;;  '(zoom-window-mode-line-color "DarkGreen"))
+
+
+
+(use-package 0blayout
+  :config
+  (0blayout-mode t))
+
+;; (require 'dired+)
 
 ;; emacs定制的变量放到my-custome.el中,每次启动后加载my-custom.el
 (setq custom-file (expand-file-name "lisp/my-custom.el" user-emacs-directory))
