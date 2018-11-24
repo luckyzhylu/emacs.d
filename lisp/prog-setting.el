@@ -72,12 +72,11 @@
       (replace-string from to))))
 (define-auto-insert "\\.\\([Hh]\\|hh\\|hpp\\)\\'"
   ["h.tpl" auto-insert-expand])
-(define-auto-insert "\\.\\([Cc]\\|cc\\|cpp\\)\\'"
-  ["cpp.tpl" auto-insert-expand])
-(define-auto-insert "\\.java\\'"
-  ["java.tpl" auto-insert-expand])
-(define-auto-insert "\\.py\\'"
-  ["py.tpl" auto-insert-expand])
+
+(define-auto-insert "\\.\\([Cc]\\|cc\\|cpp\\)\\'" ["cpp.tpl" auto-insert-expand])
+(define-auto-insert "\\.java\\'" ["java.tpl" auto-insert-expand])
+(define-auto-insert "\\.py\\'" ["py.tpl" auto-insert-expand])
+(define-auto-insert "\\.org\\'" ["org.tpl" auto-insert-expand])
 
 ;;set-buffer-file-coding-system 可以把^M^L等字符转换为unix格式
 (provide 'prog-setting)

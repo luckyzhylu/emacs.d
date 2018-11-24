@@ -1,8 +1,16 @@
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
 (require 'private-package)
 (require 'private-env)
 (require 'private-ui)
+(require 'prog-setting)
 
 
 (require 'clang-format)
@@ -18,10 +26,11 @@
 ;; bm配置
 (require 'bm)
 (global-set-key (kbd "<C-f2>") 'bm-toggle)
+(global-set-key (kbd "C-c m") 'bm-toggle)
 (global-set-key (kbd "<f2>")   'bm-next)
+;; (global-set-key (kbd "<f1>")   'bm-cycle-all-buffers)
 (global-set-key (kbd "<S-f2>") 'bm-previous)
 (global-set-key (kbd "C-c b") 'helm-bm)
-
 
 (require 'ranger)
 (ranger-override-dired-mode t)
@@ -37,6 +46,15 @@
 (require 'goto-chg)
 (global-set-key [(control ?.)] 'goto-last-change)
 (global-set-key [(control ?,)] 'goto-last-change-reverse)
+(use-package goto-chg
+  :init
+  :config
+  :bind
+  ("C-." . 'goto-last-change)
+  ("C-c ." . 'goto-last-change)
+  ("C-," . 'goto-last-change-reverse)
+  ("C-c ," . 'goto-last-change-reverse)
+  )
 
 
 ;;hydra增强按键绑定
@@ -114,8 +132,11 @@
     )
   :bind
   ([f5] . 'projectile-find-file)
+  ()
   )
-
+(projectile-mode t)
+(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 ;; ace-window
 (global-set-key (kbd "M-p") 'ace-window)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
@@ -132,15 +153,16 @@
 (global-set-key (kbd "C-c g f") 'counsel-git)
 (global-set-key (kbd "C-h f") 'counsel-describe-function)
 (global-set-key (kbd "C-h v") 'counsel-describe-variable)
-;; 设置emacs字体
-;; (set-default-font "-*-Menlo-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1")
 
 (add-hook 'after-init-hook 'global-company-mode)
 ;; (global-company-mode t)
 (global-hungry-delete-mode t)
 
-;; (require 'xcscope)
-;; (cscope-setup)
+(use-package doxymacs
+  :init
+  :config
+  (add-hook 'c-mode-common-hook 'doxymacs-mode)
+  )
 
 (use-package xcscope
   :init
@@ -155,8 +177,8 @@
 
 
 ;; 显示空白字符,删除末尾的空白字符
-(global-whitespace-mode t)
-(delete-trailing-whitespace)
+;; (global-whitespace-mode t)
+;; (delete-trailing-whitespace)
 
 (abbrev-mode t)
 (define-abbrev-table 'global-abbrev-table '(
@@ -174,6 +196,7 @@
 
 (require 'avy)
 (global-set-key (kbd "C-;") 'avy-goto-char)
+(global-set-key (kbd "C-c ;") 'avy-goto-char)
 (global-set-key (kbd "C-c l") 'avy-goto-line)
 
 ;; Enable window-numbering-mode and use M-1 through M-0 to navigate
@@ -190,16 +213,24 @@
 (setq recentf-max-menu-items 25)
 (global-set-key (kbd "C-x C-r") 'recentf-open-files)
 
-
+(require 'whitespace-cleanup-mode)
+(global-whitespace-cleanup-mode t)
 
 ;; C/C++代码风格设置
 (which-function-mode)
-(setq-default tab-width 4)
-(setq-default c-basic-offset 4)
-(setq c-default-style "linux")
-(require 'google-c-style)
-(add-hook 'c-mode-common-hook 'google-set-c-style)
-(add-hook 'c-mode-common-hook 'google-make-newline-indent)
+;; (require 'google-c-style)
+;; (add-hook 'c-mode-common-hook 'google-set-c-style)
+;; (add-hook 'c-mode-common-hook 'google-make-newline-indent)
+
+(use-package google-c-style
+  :init
+  (setq-default tab-width 4)
+  (setq c-default-style "linux")
+  (setq-default c-basic-offset 4)
+  :config
+  (add-hook 'c-mode-common-hook 'google-set-c-style)
+  (add-hook 'c-mode-common-hook 'google-make-newline-indent)
+  :bind)
 ;;打开代码折叠功能
 ;; (add-hook 'c-mode-common-hook
 ;;           (lambda() '((progn
@@ -253,3 +284,29 @@
 (setq custom-file (expand-file-name "lisp/my-custom.el" user-emacs-directory))
 (load-file custom-file)
 (require 'prog-setting)
+
+(defun read-lines (filePath)
+  "Return a list of lines of a file at filePath."
+  (with-temp-buffer
+    (insert-file-contents filePath)
+    (split-string (buffer-string) "\n" t)))
+
+(defun open-workspace()
+  (interactive)
+  (let ((filename (read-directory-name "open project:")))
+    (setq my-dirname (f-dirname filename))
+    (message "%s:%s" my-dirname filename)
+    (loop for x in (read-lines filename) do
+          (find-file (concat my-dirname "/" x)))
+    )
+  )
+
+;; (unbind-key "C-c ." c-mode-map)
+;; (unbind-key "C-c ," c-mode-map)
+(global-set-key (kbd "s-<down>") 'end-of-buffer)
+(global-set-key (kbd "s-<up>") 'beginning-of-buffer)
+(global-set-key (kbd "s-g") 'goto-line)
+
+(window-numbering-mode t)
+(setq window-numbering-assign-func
+      (lambda () (when (equal (buffer-name) "*Calculator*") 9)))
